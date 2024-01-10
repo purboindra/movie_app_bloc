@@ -220,6 +220,19 @@ class _DetailScreenState extends State<DetailScreen> {
                                                   ),
                                                 );
                                               }
+                                            } else if (state
+                                                is LoadingAddToFavState) {
+                                              return Container(
+                                                decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: Colors.white
+                                                        .withOpacity(0.8)),
+                                                padding:
+                                                    const EdgeInsets.all(5),
+                                                child:
+                                                    const CircularProgressIndicator
+                                                        .adaptive(),
+                                              );
                                             }
                                             return const Center(
                                               child: Icon(
@@ -254,7 +267,8 @@ class _DetailScreenState extends State<DetailScreen> {
                                     }
                                   },
                                   builder: (context, state) {
-                                    if (state is LoadingGetWatchlistState) {
+                                    if (state is LoadingGetWatchlistState ||
+                                        state is LoadingAddToWatchlistState) {
                                       return Container(
                                         decoration: BoxDecoration(
                                             shape: BoxShape.circle,
