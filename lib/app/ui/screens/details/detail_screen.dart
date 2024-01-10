@@ -180,11 +180,26 @@ class _DetailScreenState extends State<DetailScreen> {
                                           .adaptive();
                                     }
                                     return IconButton(
-                                      onPressed: () async {
-                                        context.read<FavoriteMovieBloc>().add(
-                                            AddMovieToFavEvent(
-                                                "533899", movie.id));
-                                      },
+                                      onPressed: state
+                                              is SuccessGetFavoriteMovieState
+                                          ? state.favoriteMovies.any(
+                                                  (element) =>
+                                                      element.id == movie.id)
+                                              ? () {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    const SnackBar(
+                                                        content: Text(
+                                                            "Movie yang sudah menjadi favorite tidak dapat dihapus...")),
+                                                  );
+                                                }
+                                              : () async {
+                                                  context
+                                                      .read<FavoriteMovieBloc>()
+                                                      .add(AddMovieToFavEvent(
+                                                          "533899", movie.id));
+                                                }
+                                          : null,
                                       icon: Container(
                                           padding: const EdgeInsets.all(5),
                                           decoration: BoxDecoration(
@@ -251,11 +266,27 @@ class _DetailScreenState extends State<DetailScreen> {
                                       );
                                     }
                                     return IconButton(
-                                      onPressed: () async {
-                                        context.read<WatchlistMovieBloc>().add(
-                                            AddMovieToWatchlistEvent(
-                                                "533899", movie.id));
-                                      },
+                                      onPressed: state
+                                              is SuccessGetWatchlistState
+                                          ? state.favoriteMovies.any(
+                                                  (element) =>
+                                                      element.id == movie.id)
+                                              ? () {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(const SnackBar(
+                                                          content: Text(
+                                                              "Movie yang sudah menjadi watchlist tidak dapat dihapus...")));
+                                                }
+                                              : () async {
+                                                  context
+                                                      .read<
+                                                          WatchlistMovieBloc>()
+                                                      .add(
+                                                          AddMovieToWatchlistEvent(
+                                                              "533899",
+                                                              movie.id));
+                                                }
+                                          : null,
                                       icon: Container(
                                           padding: const EdgeInsets.all(5),
                                           decoration: BoxDecoration(
