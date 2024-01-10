@@ -13,6 +13,7 @@ import 'package:imdb_bloc/domain/bloc/favorite_movie_bloc.dart';
 import 'package:imdb_bloc/domain/bloc/home_bloc.dart';
 import 'package:imdb_bloc/domain/bloc/main_bloc.dart';
 import 'package:imdb_bloc/domain/bloc/watchlist_movie_bloc.dart';
+import 'package:imdb_bloc/domain/event/auth_event.dart';
 import 'package:imdb_bloc/domain/event/favorite_movie_event.dart';
 import 'package:imdb_bloc/domain/event/watchlist_movie_event.dart';
 import 'package:imdb_bloc/domain/state/auth_state.dart';
@@ -23,19 +24,11 @@ import 'package:imdb_bloc/utils/colors.dart';
 import 'package:imdb_bloc/utils/extensions.dart';
 import 'package:imdb_bloc/utils/typography.dart';
 
-const List<BottomNavigationBarItem> _bottomNavbarItem = [
-  BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-  BottomNavigationBarItem(icon: Icon(Icons.favorite), label: "Favorite"),
-  BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-];
-
 List<Widget> _buildBody = [
   const _BuildHomeWidget(),
   const _BuildFavoriteWidget(),
   const _BuildWatchlistWidget(),
-  const Center(
-    child: Text("Person"),
-  ),
+  const _BuildProfileWidget(),
 ];
 
 const List<IconData> _icons = [
@@ -105,6 +98,46 @@ class _MainScreenState extends State<MainScreen> {
           extendBody: true,
           body: _buildBody[state.tabIndex],
         );
+      },
+    );
+  }
+}
+
+class _BuildProfileWidget extends StatelessWidget {
+  const _BuildProfileWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<AuthBloc, AuthState>(
+      builder: (context, state) {
+        if (state is LoadingLogOutState) {
+          return const Center(
+            child: CircularProgressIndicator.adaptive(),
+          );
+        }
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("Sign Out"),
+              10.h,
+              ElevatedButton(
+                  onPressed: () {
+                    context.read<AuthBloc>().add(LogoutEvent());
+                  },
+                  child: const Text("Sign out"))
+            ],
+          ),
+        );
+      },
+      listener: (context, state) {
+        if (state is SuccessLogOutState) {
+          context.pushReplacement(AppRouter.signIn);
+        } else if (state is ErrorLogOutState) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(state.errorMessage),
+          ));
+        }
       },
     );
   }

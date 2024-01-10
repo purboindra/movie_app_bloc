@@ -47,4 +47,10 @@ class AuthRepositoryImpl implements AuthRepository {
     }
     return false;
   }
+
+  @override
+  Future<bool> signOut() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    return await sharedPreferences.remove("token");
+  }
 }

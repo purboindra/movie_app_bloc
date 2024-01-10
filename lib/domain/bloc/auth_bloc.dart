@@ -10,6 +10,7 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState> {
   AuthBloc(this.authRepository) : super(AuthInitialState()) {
     on<SignInEvent>(_handleSignIn);
     on<GetCurrentUserEvent>(_getUser);
+    on<LogoutEvent>(_handleLogout);
   }
 
   void _getUser(GetCurrentUserEvent event, Emitter<AuthState> emit) async {
@@ -42,6 +43,21 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState> {
       AppPrint.debugPrint("USER ${event.email} ${event.password}");
     } else {
       emit(AuthInitialState());
+    }
+  }
+
+  void _handleLogout(LogoutEvent event, Emitter<AuthState> emit) async {
+    emit(LoadingLogOutState());
+    try {
+      final result = await authRepository.signOut();
+      if (result) {
+        emit(SuccessLogOutState());
+      } else {
+        emit(
+            ErrorLogOutState("Maaf, terjadi kesalahan. Silahkan coba lagi..."));
+      }
+    } catch (e) {
+      emit(ErrorLogOutState(e.toString()));
     }
   }
 

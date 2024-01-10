@@ -43,3 +43,16 @@ class SuccessGetCurrentUserState extends AuthState {
         user,
       ];
 }
+
+class LoadingLogOutState extends AuthState {}
+
+class SuccessLogOutState extends AuthState {}
+
+class ErrorLogOutState extends AuthState {
+  final String errorMessage;
+
+  ErrorLogOutState(this.errorMessage);
+
+  @override
+  List<Object> get props => [errorMessage];
+}
