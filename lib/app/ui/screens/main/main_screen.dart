@@ -55,6 +55,8 @@ class _MainScreenState extends State<MainScreen> {
     _pageController.dispose();
     context.read<AuthBloc>().close();
     context.read<HomeBloc>().close();
+    context.read<FavoriteMovieBloc>().close();
+    context.read<WatchlistMovieBloc>().close();
 
     super.dispose();
   }
