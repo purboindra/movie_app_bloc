@@ -13,7 +13,6 @@ import 'package:imdb_bloc/domain/bloc/favorite_movie_bloc.dart';
 import 'package:imdb_bloc/domain/bloc/home_bloc.dart';
 import 'package:imdb_bloc/domain/bloc/main_bloc.dart';
 import 'package:imdb_bloc/domain/bloc/watchlist_movie_bloc.dart';
-import 'package:imdb_bloc/domain/event/auth_event.dart';
 import 'package:imdb_bloc/domain/event/favorite_movie_event.dart';
 import 'package:imdb_bloc/domain/event/watchlist_movie_event.dart';
 import 'package:imdb_bloc/domain/state/auth_state.dart';
@@ -69,7 +68,6 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   void initState() {
-    context.read<AuthBloc>().add(GetCurrentUserEvent());
     context
         .read<FavoriteMovieBloc>()
         .add(const GetFavoriteMovieEvent("533899"));
